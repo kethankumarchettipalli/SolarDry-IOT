@@ -11,13 +11,14 @@ import { getDatabase, Database } from "firebase/database";
 // You can find these values in your Firebase Console:
 // Project Settings > General > Your apps > Firebase SDK snippet
 const firebaseConfig = {
-  apiKey: "AIzaSyBFvtdlwKxID5yFBkT_Y5Rkrd_-JTCWM3o",
-  authDomain: "solardry-iot.firebaseapp.com",
-  projectId: "solardry-iot",
-  storageBucket: "solardry-iot.firebasestorage.app",
-  messagingSenderId: "703676305732",
-  appId: "1:703676305732:web:2f1d6cb0b39142e03f4711",
-  measurementId: "G-1QF05D3KP6"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
