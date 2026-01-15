@@ -1,9 +1,40 @@
+/* ✅ 1. GLOBAL RESET & SCROLL FIX */
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important; /* 🚫 Stops horizontal scrolling */
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit; /* Ensures padding doesn't break layout width */
+}
+
+/* ✅ 2. ROOT CONTAINER FIX */
 #root {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
+
+/* 📱 MOBILE TWEAK: Reduce padding on small screens */
+@media (max-width: 600px) {
+  #root {
+    padding: 1rem; /* Less padding on mobile = More space for content */
+  }
+}
+
+/* --- Rest of your original styles --- */
 
 .logo {
   height: 6em;
