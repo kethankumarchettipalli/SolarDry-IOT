@@ -3,7 +3,8 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult, // Import this
   signOut,
   updateProfile,
   User as FirebaseUser,
@@ -46,11 +47,11 @@ const mapFirebaseUser = (firebaseUser: FirebaseUser, displayName?: string): User
 // Create or update user profile in Realtime Database
 const createUserProfile = async (uid: string, name: string, email: string) => {
   if (!database) return;
-  
+
   try {
     const userRef = ref(database, `users/${uid}`);
     const snapshot = await get(userRef);
-    
+
     if (!snapshot.exists()) {
       await set(userRef, {
         name,
@@ -70,13 +71,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     // Check if Firebase auth is properly initialized
-    if (!auth || typeof auth.onAuthStateChanged !== 'function') {
+    if (!auth || typeof auth.onAuthStateChanged !== "function") {
       console.warn("Firebase Auth not properly configured. Using placeholder mode.");
       setLoading(false);
       return;
     }
 
-    // Firebase Auth state listener for session persistence
+    // 1. Handle the return from the Google Redirect
+    // This is required because the app reloads after a redirect login
+    getRedirectResult(auth)
+      .then(async (result) => {
+        if (result && result.user) {
+          // Create user profile if it doesn't exist (Logic moved here from loginWithGoogle)
+          await createUserProfile(
+            result.user.uid,
+            result.user.displayName || result.user.email?.split("@")[0] || "User",
+            result.user.email || ""
+          );
+        }
+      })
+      .catch((err) => {
+        console.error("Redirect login error:", err);
+        setError(err.message);
+      });
+
+    // 2. Firebase Auth state listener for session persistence
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         // Try to get display name from database if not set on auth user
@@ -108,6 +127,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      // onAuthStateChanged handles the state update
     } catch (err) {
       const message = err instanceof Error ? err.message : "Login failed";
       setError(message);
@@ -122,14 +142,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      
+
       // Update Firebase Auth profile with display name
       if (name && userCredential.user) {
         await updateProfile(userCredential.user, { displayName: name });
-        
+
         // Create user profile in Realtime Database
         await createUserProfile(userCredential.user.uid, name, email);
-        
+
         // Update local user state with name
         setUser(mapFirebaseUser(userCredential.user, name));
       }
@@ -146,16 +166,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(true);
 
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      
-      // Create user profile if it doesn't exist
-      if (result.user) {
-        await createUserProfile(
-          result.user.uid,
-          result.user.displayName || result.user.email?.split("@")[0] || "User",
-          result.user.email || ""
-        );
-      }
+      // NOTE: This triggers a page redirect.
+      // The code DOES NOT continue here.
+      // The result is handled in the useEffect via getRedirectResult.
+      await signInWithRedirect(auth, googleProvider);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Google sign-in failed";
       setError(message);
