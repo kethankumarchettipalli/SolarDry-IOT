@@ -3,15 +3,14 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signInWithRedirect,
-  getRedirectResult, // Import this
+  signInWithPopup, // ✅ CHANGED: Use Popup
   signOut,
   updateProfile,
   User as FirebaseUser,
 } from "firebase/auth";
 import { ref, set, get } from "firebase/database";
-import { auth, googleProvider, database } from "@/lib/firebase";
-import { User } from "@/lib/shared";
+import { auth, googleProvider, database } from "@/lib/firebase"; // Adjust path if needed
+import { User } from "@/lib/shared"; // Adjust path if needed
 
 interface AuthContextType {
   user: User | null;
@@ -44,20 +43,14 @@ const mapFirebaseUser = (firebaseUser: FirebaseUser, displayName?: string): User
   photoURL: firebaseUser.photoURL || undefined,
 });
 
-// Create or update user profile in Realtime Database
+// Helper: Create Profile
 const createUserProfile = async (uid: string, name: string, email: string) => {
   if (!database) return;
-
   try {
     const userRef = ref(database, `users/${uid}`);
     const snapshot = await get(userRef);
-
     if (!snapshot.exists()) {
-      await set(userRef, {
-        name,
-        email,
-        theme: "light",
-      });
+      await set(userRef, { name, email, theme: "light" });
     }
   } catch (error) {
     console.warn("Could not create user profile:", error);
@@ -70,35 +63,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check if Firebase auth is properly initialized
-    if (!auth || typeof auth.onAuthStateChanged !== "function") {
-      console.warn("Firebase Auth not properly configured. Using placeholder mode.");
-      setLoading(false);
-      return;
-    }
+    // ✅ 1. REMOVED the getRedirectResult block completely. 
+    // We don't need it because Popup returns the user immediately.
 
-    // 1. Handle the return from the Google Redirect
-    // This is required because the app reloads after a redirect login
-    getRedirectResult(auth)
-      .then(async (result) => {
-        if (result && result.user) {
-          // Create user profile if it doesn't exist (Logic moved here from loginWithGoogle)
-          await createUserProfile(
-            result.user.uid,
-            result.user.displayName || result.user.email?.split("@")[0] || "User",
-            result.user.email || ""
-          );
-        }
-      })
-      .catch((err) => {
-        console.error("Redirect login error:", err);
-        setError(err.message);
-      });
-
-    // 2. Firebase Auth state listener for session persistence
+    // 2. Auth State Listener
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Try to get display name from database if not set on auth user
         let displayName = firebaseUser.displayName;
         if (!displayName && database) {
           try {
@@ -124,10 +94,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string) => {
     setError(null);
     setLoading(true);
-
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // onAuthStateChanged handles the state update
     } catch (err) {
       const message = err instanceof Error ? err.message : "Login failed";
       setError(message);
@@ -139,18 +107,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signup = async (email: string, password: string, name?: string) => {
     setError(null);
     setLoading(true);
-
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-      // Update Firebase Auth profile with display name
       if (name && userCredential.user) {
         await updateProfile(userCredential.user, { displayName: name });
-
-        // Create user profile in Realtime Database
         await createUserProfile(userCredential.user.uid, name, email);
-
-        // Update local user state with name
         setUser(mapFirebaseUser(userCredential.user, name));
       }
     } catch (err) {
@@ -161,15 +122,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  // ✅ UPDATED: Login with Google using Popup
   const loginWithGoogle = async () => {
     setError(null);
     setLoading(true);
 
     try {
-      // NOTE: This triggers a page redirect.
-      // The code DOES NOT continue here.
-      // The result is handled in the useEffect via getRedirectResult.
-      await signInWithRedirect(auth, googleProvider);
+      // 1. Open the Popup
+      const result = await signInWithPopup(auth, googleProvider);
+      
+      // 2. Immediate Success Handling
+      if (result.user) {
+        // Create user profile if it doesn't exist
+        await createUserProfile(
+          result.user.uid,
+          result.user.displayName || result.user.email?.split("@")[0] || "User",
+          result.user.email || ""
+        );
+      }
+      // Note: onAuthStateChanged will trigger automatically and update the user state
     } catch (err) {
       const message = err instanceof Error ? err.message : "Google sign-in failed";
       setError(message);
