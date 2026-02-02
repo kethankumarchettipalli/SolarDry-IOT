@@ -1,147 +1,73 @@
-# 🌞 SolarDry IoT – Automated Solar Dryer Monitoring System
+# Welcome to your Lovable project
 
-An IoT-based monitoring and visualization system for an **automated solar dryer**, designed to track real-time environmental conditions such as **temperature and humidity** for selected agricultural products using **ESP32, Firebase, and a web dashboard**.
+## Project info
 
----
+**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
-## 📌 Project Overview
+## How can I edit this code?
 
-SolarDry IoT is developed to support **controlled solar dehydration** of agricultural products.  
-The system continuously monitors sensor data from a solar dryer cabin and visualizes it through a modern web dashboard and Android app (WebView-based).
+There are several ways of editing your application.
 
-The project focuses on **seven predefined agricultural products**, each with fixed drying parameters based on standard agricultural practices.
+**Use Lovable**
 
----
+Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
 
-## 🎯 Objectives
+Changes made via Lovable will be committed automatically to this repo.
 
-- Monitor real-time temperature and humidity inside a solar dryer
-- Visualize sensor data using charts and status indicators
-- Compare live data against predefined crop-specific thresholds
-- Provide a responsive web dashboard and Android application
-- Ensure simple, reliable, and academic-friendly system design
+**Use your preferred IDE**
 
----
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
-## 🧩 System Architecture
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-ESP32 + Sensors
-↓
-Firebase Realtime Database
-↓
-Web Dashboard (React)
-↓
-Android App (WebView)
+Follow these steps:
 
-yaml
-Copy code
+```sh
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
 
----
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
 
-## 🛠️ Hardware Components
+# Step 3: Install the necessary dependencies.
+npm i
 
-- ESP32 Development Board  
-- DHT11 Temperature & Humidity Sensor  
-- 12V Cooling Fans  
-- Relay Module (12V)  
-- OLED Display (0.96”)  
-- Power Supply (12V Adapter)  
-- Solar Dryer Cabin (designed using AutoCAD)  
-
----
-
-## 💻 Software Stack
-
-### Frontend
-- React + TypeScript
-- Tailwind CSS
-- Recharts (Data Visualization)
-- Lucide / Emoji Icons
-
-### Backend & Cloud
-- Firebase Realtime Database
-- Firebase Authentication (Email/Password + Google Sign-In)
-
-### Embedded System
-- ESP32 (C++ using Arduino IDE)
-- HTTP-based Firebase communication
-
-### Mobile App
-- Android Studio
-- WebView-based Android application
-
----
-
-## 🌾 Supported Crops (Fixed Scope)
-
-The system supports **seven predefined agricultural products**:
-
-| Crop | Temperature (°C) | Humidity (%) | Drying Time (hrs) |
-|----|------------------|--------------|-------------------|
-| Tomato | 55–65 | 10–15 | 8 |
-| Mango | 50–55 | 12–18 | 12 |
-| Banana | 50 | 15–20 | 10 |
-| Chilli Pepper | 60 | 8–12 | 6 |
-| Fish | 55–60 | 10–15 | 10 |
-| Cassava | 50–55 | 12–18 | 10 |
-| Coffee Beans | 45–50 | 12–15 | 24 |
-
-> Crop parameters are **hardcoded** to ensure reliability and simplicity as per project scope.
-
----
-
-## 📊 Key Features
-
-- Real-time sensor data visualization
-- Crop-based drying parameter selection
-- Target vs actual deviation monitoring
-- Firebase-powered live updates
-- User authentication (Email + Google)
-- Dark/Light mode with preference persistence
-- Android app via WebView wrapper
-
----
-
-## 🔐 Firebase Usage
-
-### Realtime Database Structure
-/liveData
-├── temperature
-├── humidity
-└── timestamp
-
-/users/{uid}
-└── theme
-
-yaml
-Copy code
-
-### Authentication
-- Email & Password
-- Google Sign-In
-
----
-
-## 🚀 Setup Instructions
-
-### 1️⃣ Web Dashboard
-```bash
-npm install
+# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
-2️⃣ Firebase Configuration
-Create Firebase project
+```
 
-Enable Authentication
+**Edit a file directly in GitHub**
 
-Enable Realtime Database
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
 
-Replace Firebase config placeholders in the project
+**Use GitHub Codespaces**
 
-3️⃣ ESP32
-Open Arduino IDE
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-Paste provided ESP32 C++ code
+## What technologies are used for this project?
 
-Update WiFi credentials & Firebase URL
+This project is built with:
 
-Upload to ESP32
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+
+## How can I deploy this project?
+
+Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+
+## Can I connect a custom domain to my Lovable project?
+
+Yes, you can!
+
+To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+
+Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)

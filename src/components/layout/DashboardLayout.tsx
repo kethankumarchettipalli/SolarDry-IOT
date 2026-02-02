@@ -45,7 +45,7 @@ export const DashboardLayout: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background flex overflow-x-hidden w-full max-w-full">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -112,9 +112,9 @@ export const DashboardLayout: React.FC = () => {
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-screen min-w-0">
         {/* Header */}
-        <header className="h-16 bg-card border-b border-border flex items-center justify-between px-4 lg:px-6">
+        <header className="h-16 bg-card border-b border-border flex items-center justify-between px-3 sm:px-4 lg:px-6 gap-2">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
@@ -124,12 +124,12 @@ export const DashboardLayout: React.FC = () => {
             >
               <Menu className="w-5 h-5" />
             </Button>
-            <div>
-              <h2 className="font-semibold text-foreground">
+            <div className="min-w-0">
+              <h2 className="font-semibold text-foreground text-sm sm:text-base truncate">
                 {navItems.find((item) => isActive(item.path))?.label || "Dashboard"}
               </h2>
-              <p className="text-xs text-muted-foreground">
-                Automated Solar Dryer Monitoring System
+              <p className="text-xs text-muted-foreground hidden sm:block truncate">
+                Solar Dryer Monitoring
               </p>
             </div>
           </div>
@@ -163,7 +163,7 @@ export const DashboardLayout: React.FC = () => {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-4 lg:p-6 overflow-auto">
+        <main className="flex-1 p-3 sm:p-4 lg:p-6 overflow-x-hidden overflow-y-auto">
           <Outlet />
         </main>
       </div>

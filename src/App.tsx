@@ -3,16 +3,10 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-
-// Import the new Route Guards
-import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { PublicRoute } from "@/components/PublicRoute";
-
-// Pages
-import Login from "@/pages/Login";
+import Index from "@/pages/Index";
 import Dashboard from "@/pages/Dashboard";
 import Visualization from "@/pages/Visualization";
 import Alerts from "@/pages/Alerts";
@@ -20,22 +14,38 @@ import SessionHistory from "@/pages/SessionHistory";
 import SettingsPage from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
 
+// Create React Query client
 const queryClient = new QueryClient();
+
+// Protected route wrapper
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+};
 
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* ✅ Public Route: Wraps Login so logged-in users get redirected to Dashboard */}
-      <Route
-        path="/login"
-        element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        }
-      />
+      {/* Landing / Login page */}
+      <Route path="/" element={<Index />} />
 
-      {/* ✅ Protected Routes: Wraps Dashboard Layout */}
+      {/* Protected routes with dashboard layout */}
       <Route
         element={
           <ProtectedRoute>
@@ -50,10 +60,10 @@ const AppRoutes = () => {
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
 
-      {/* Default Redirect */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      {/* Legacy redirect */}
+      <Route path="/login" element={<Navigate to="/" replace />} />
 
-      {/* 404 Not Found */}
+      {/* 404 */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
