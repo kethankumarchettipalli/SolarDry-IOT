@@ -162,3 +162,45 @@ p, h1, h2, h3, h4, h5, h6, span, div, a {
     line-height: 1.2 !important;     /* Make multi-line text look good */
   }
 }
+/* 📱 MOBILE OVERRIDES (Add to bottom of App.css) */
+@media (max-width: 640px) {
+
+  /* 1. FORCE TEXT WRAPPING (Targets Buttons AND Links) */
+  button, 
+  a, 
+  [role="button"], 
+  .whitespace-nowrap {
+    white-space: normal !important; /* Force text to wrap */
+    height: auto !important;        /* Allow height to grow */
+    min-height: 44px;               /* Maintain touch target size */
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    max-width: 100% !important;     /* Never exceed screen width */
+    display: inline-flex;           /* Ensure flex behavior works */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* 2. FORCE FLEX CONTAINERS TO WRAP */
+  /* This prevents "rows" of items from pushing the screen wide */
+  .flex, [class*="flex-"] {
+    flex-wrap: wrap !important;
+    max-width: 100vw !important; /* Hard limit */
+  }
+
+  /* 3. SAFETY FOR IMAGES & SVGs */
+  img, svg, video {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  
+  /* 4. ROOT CONTAINER LOCK */
+  /* Double-check the main wrapper cannot overflow */
+  #root, body, html {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    position: relative;
+  }
+}
