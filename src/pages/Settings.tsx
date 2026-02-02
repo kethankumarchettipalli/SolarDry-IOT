@@ -48,7 +48,6 @@ const SettingsPage: React.FC = () => {
             <h3 className="font-semibold text-foreground text-lg">
               {user?.displayName || "User"}
             </h3>
-            <p className="text-muted-foreground">{user?.email}</p>
           </div>
         </div>
 
