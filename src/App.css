@@ -1,4 +1,6 @@
-/* ✅ 1. GLOBAL RESET & SCROLL FIX */
+/* =========================================
+   1. GLOBAL RESET & LAYOUT FIXES
+   ========================================= */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -10,15 +12,34 @@ html, body {
   padding: 0;
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden !important; /* 🚫 Stops horizontal scrolling */
+  overflow-x: hidden !important; /* 🚫 Prevents scrollbar from appearing */
   box-sizing: border-box;
 }
 
 *, *::before, *::after {
-  box-sizing: inherit; /* Ensures padding doesn't break layout width */
+  box-sizing: inherit; /* Ensures padding doesn't increase width */
 }
 
-/* ✅ 2. ROOT CONTAINER FIX */
+/* =========================================
+   2. MOBILE RESPONSIVENESS (THE "FIT" FIX)
+   ========================================= */
+/* 📸 Force media to shrink inside the screen */
+img, video, iframe, svg {
+  max-width: 100%;
+  height: auto;
+  display: block; /* Removes tiny space below inline images */
+  margin: 0 auto; /* Centers them */
+}
+
+/* 📝 Force long text/links to break onto the next line */
+p, h1, h2, h3, h4, h5, h6, span, div, a {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* =========================================
+   3. CONTAINER STYLES
+   ========================================= */
 #root {
   width: 100%;
   max-width: 1280px;
@@ -30,21 +51,37 @@ html, body {
 /* 📱 MOBILE TWEAK: Reduce padding on small screens */
 @media (max-width: 600px) {
   #root {
-    padding: 1rem; /* Less padding on mobile = More space for content */
+    padding: 1rem;
+    width: 100%; /* Ensures full usage of small screens */
   }
 }
 
-/* --- Rest of your original styles --- */
-
+/* =========================================
+   4. LOGOS & ANIMATIONS
+   ========================================= */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
+  
+  /* 📱 Mobile Safety for Logos */
+  max-width: 100%; 
+  object-fit: contain; 
 }
+
+/* On very small screens, reduce logo size slightly */
+@media (max-width: 400px) {
+  .logo {
+    height: 4em;
+    padding: 1em;
+  }
+}
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -64,6 +101,9 @@ html, body {
   }
 }
 
+/* =========================================
+   5. COMPONENT STYLES
+   ========================================= */
 .card {
   padding: 2em;
 }
