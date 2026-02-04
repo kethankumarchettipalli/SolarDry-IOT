@@ -43,20 +43,14 @@ const mapFirebaseUser = (firebaseUser: FirebaseUser, displayName?: string): User
   photoURL: firebaseUser.photoURL || undefined,
 });
 
-// Create or update user profile in Realtime Database
+// Helper: Create Profile in Realtime Database
 const createUserProfile = async (uid: string, name: string, email: string) => {
   if (!database) return;
-  
   try {
     const userRef = ref(database, `users/${uid}`);
     const snapshot = await get(userRef);
-    
     if (!snapshot.exists()) {
-      await set(userRef, {
-        name,
-        email,
-        theme: "light",
-      });
+      await set(userRef, { name, email, theme: "light" });
     }
   } catch (error) {
     console.warn("Could not create user profile:", error);
@@ -69,18 +63,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check if Firebase auth is properly initialized
-    if (!auth || typeof auth.onAuthStateChanged !== 'function') {
-      console.warn("Firebase Auth not properly configured. Using placeholder mode.");
-      setLoading(false);
-      return;
-    }
-
-    // Firebase Auth state listener for session persistence
+    // Auth State Listener
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Try to get display name from database if not set on auth user
         let displayName = firebaseUser.displayName;
+        
+        // Try to fetch name from DB if missing in Auth
         if (!displayName && database) {
           try {
             const userRef = ref(database, `users/${firebaseUser.uid}/name`);
@@ -105,7 +93,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string) => {
     setError(null);
     setLoading(true);
-
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (err) {
@@ -119,18 +106,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signup = async (email: string, password: string, name?: string) => {
     setError(null);
     setLoading(true);
-
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      
-      // Update Firebase Auth profile with display name
       if (name && userCredential.user) {
         await updateProfile(userCredential.user, { displayName: name });
-        
-        // Create user profile in Realtime Database
         await createUserProfile(userCredential.user.uid, name, email);
-        
-        // Update local user state with name
         setUser(mapFirebaseUser(userCredential.user, name));
       }
     } catch (err) {
@@ -146,9 +126,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(true);
 
     try {
+      // ✅ FIX: Force Google to show the account selection screen every time
+      googleProvider.setCustomParameters({ prompt: "select_account" });
+
       const result = await signInWithPopup(auth, googleProvider);
       
-      // Create user profile if it doesn't exist
       if (result.user) {
         await createUserProfile(
           result.user.uid,
