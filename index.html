@@ -3,16 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     
-    <!-- ✅ FIX: Comprehensive Icon Setup with Cache Busting -->
-    <!-- 1. Primary PNG Icon (most modern browsers) -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=3" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png?v=3" />
-    
-    <!-- 2. Apple Touch Icon (iOS and some desktop bookmarks) -->
-    <link rel="apple-touch-icon" href="/favicon.png?v=3" />
-
-    <!-- 3. Legacy Fallback (.ico) - Only if you have this file -->
-    <link rel="shortcut icon" href="/favicon.ico?v=3" />
+    <!-- ✅ FIX: Single Source of Truth -->
+    <!-- We removed the .ico fallback to force the browser to use this PNG -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#2d6a4f" />
