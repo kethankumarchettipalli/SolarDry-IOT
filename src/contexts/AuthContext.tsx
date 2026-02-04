@@ -7,6 +7,7 @@ import {
   signOut,
   updateProfile,
   User as FirebaseUser,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import { ref, set, get } from "firebase/database";
 import { auth, googleProvider, database } from "@/lib/firebase";
@@ -126,10 +127,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(true);
 
     try {
-      // ✅ FIX: Force Google to show the account selection screen every time
-      googleProvider.setCustomParameters({ prompt: "select_account" });
+      // ✅ FIX: Create a FRESH provider instance to guarantee parameter application
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({
+        prompt: "select_account"
+      });
 
-      const result = await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, provider);
       
       if (result.user) {
         await createUserProfile(
