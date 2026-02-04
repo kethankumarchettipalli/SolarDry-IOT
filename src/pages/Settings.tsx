@@ -48,20 +48,25 @@ const SettingsPage: React.FC = () => {
             <h3 className="font-semibold text-foreground text-lg">
               {user?.displayName || "User"}
             </h3>
+            <p className="text-muted-foreground">{user?.email}</p>
           </div>
         </div>
 
         <div className="grid gap-4">
-          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-            <div>
+          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg min-w-0">
+            <div className="min-w-0 flex-1">
               <p className="font-medium text-foreground">Email</p>
-              <p className="text-sm text-muted-foreground">{user?.email}</p>
+              <p className="text-sm text-muted-foreground truncate" title={user?.email || ''}>
+                {user?.email}
+              </p>
             </div>
           </div>
-          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-            <div>
+          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg min-w-0">
+            <div className="min-w-0 flex-1">
               <p className="font-medium text-foreground">User ID</p>
-              <p className="text-sm text-muted-foreground font-mono">{user?.uid}</p>
+              <p className="text-sm text-muted-foreground font-mono truncate" title={user?.uid || ''}>
+                {user?.uid}
+              </p>
             </div>
           </div>
         </div>

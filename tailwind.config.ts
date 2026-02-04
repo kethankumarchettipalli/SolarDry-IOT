@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss";
 
+// Custom animation additions for intelligent loader
+
 export default {
   darkMode: ["class"],
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
@@ -116,13 +118,38 @@ export default {
           "0%, 100%": { boxShadow: "0 0 20px hsl(var(--primary) / 0.3)" },
           "50%": { boxShadow: "0 0 40px hsl(var(--primary) / 0.5)" },
         },
+        "spin-slow": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
+        "reverse-spin": {
+          from: { transform: "rotate(360deg)" },
+          to: { transform: "rotate(0deg)" },
+        },
+        "energy-breathe": {
+          "0%, 100%": { 
+            opacity: "0.3",
+            transform: "scale(1)"
+          },
+          "50%": { 
+            opacity: "0.5",
+            transform: "scale(1.05)"
+          },
+        },
+        "energy-drift": {
+          "0%": { transform: "translate(0, 0)" },
+          "25%": { transform: "translate(10px, -10px)" },
+          "50%": { transform: "translate(20px, 0)" },
+          "75%": { transform: "translate(10px, 10px)" },
+          "100%": { transform: "translate(0, 0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "pulse-slow": "pulse-slow 2s ease-in-out infinite",
         "fade-in": "fade-in 0.3s ease-out",
-        "fade-in-up": "fade-in-up 0.5s ease-out",
+        "fade-in-up": "fade-in-up 0.5s ease-out both",
         "fade-in-up-delay": "fade-in-up 0.5s ease-out 0.1s both",
         "fade-in-up-delay-2": "fade-in-up 0.5s ease-out 0.2s both",
         "fade-in-up-delay-3": "fade-in-up 0.5s ease-out 0.3s both",
@@ -130,6 +157,10 @@ export default {
         "slide-up": "slide-up 0.4s ease-out",
         "float": "float 3s ease-in-out infinite",
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "spin-slow": "spin-slow 6s linear infinite",
+        "reverse-spin": "reverse-spin 4s linear infinite",
+        "energy-breathe": "energy-breathe 6s ease-in-out infinite",
+        "energy-drift": "energy-drift 15s ease-in-out infinite",
       },
       boxShadow: {
         card: "0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05)",

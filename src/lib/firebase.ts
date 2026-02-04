@@ -7,9 +7,7 @@ import { initializeApp, FirebaseApp } from "firebase/app";
 import { getAuth, Auth, GoogleAuthProvider } from "firebase/auth";
 import { getDatabase, Database } from "firebase/database";
 
-// IMPORTANT: Replace these placeholders with your Firebase project credentials
-// You can find these values in your Firebase Console:
-// Project Settings > General > Your apps > Firebase SDK snippet
+
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,

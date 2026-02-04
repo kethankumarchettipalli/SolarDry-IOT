@@ -1,73 +1,100 @@
-# Welcome to your Lovable project
+🌞 SolarDry IoT – Smart Solar Drying Monitoring System
 
-## Project info
+SolarDry IoT is a comprehensive web and mobile-accessible system designed to monitor, visualize, and manage the solar drying process. Leveraging IoT principles and real-time data handling, this project focuses on providing intelligent decision support and a user-friendly visualization layer for agricultural drying applications.
+The system is architected to function seamlessly across Desktop, Mobile Browsers, and Android WebView, ensuring a consistent experience for demonstration and future hardware integration.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+🎯 Objectives
 
-## How can I edit this code?
+Real-Time Monitoring: To track the solar drying parameters and status instantly.
+Data Visualization: To present complex sensor data in a clear, readable format.
+Responsive UI: To ensure a professional user interface across all device types.
+Scalability: To establish a foundation for future AI analysis and automated hardware control.
 
-There are several ways of editing your application.
+🧩 Key Features
 
-**Use Lovable**
+🔹 Authentication & User Flow
+Secure Access: Implemented via Firebase Authentication (Email/Password & Google Sign-In).
+State Management: Real-time detection of authentication state for secure session handling.
+Optimized Flow: Clean transition from Intro → Login → Dashboard.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+🔹 Responsive Design & Navigation
+Premium Intro Interface: A modern, high-impact landing screen with glassmorphism and animated elements.
+Mobile View: Prioritizes the "Intro" page with a clear "Get Started" CTA for logged-out users and inline login forms.
+Desktop View: Features a side-by-side layout (Intro + Login).
+Smart UI Logic: Logged-in users see a system loading/connection animation instead of generic login prompts.
 
-Changes made via Lovable will be committed automatically to this repo.
+🔹 Dashboard & Monitoring
+Live Data: Powered by Firebase Realtime Database for instant updates.
+Status Visualization: Dynamic display of drying status and progress.
+Sensor Metrics: Clear, readable UI for visualizing temperature, humidity, and other sensor values.
 
-**Use your preferred IDE**
+🔹 Drying Simulation
+Progress Tracking: Visualizes drying progress based on estimated/simulated values.
+Demo-Ready: Data fetch mechanisms are designed to support testing and demonstration without immediate dependency on physical hardware.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+🛠️ Technology Stack
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Category
+Technologies
+Frontend
+React, TypeScript, Tailwind CSS, Responsive Web Design
+Backend
+Firebase Authentication, Firebase Realtime Database
+Mobile
+Android WebView (Hybrid Implementation)
+Deployment
+Vercel (Web), GitHub (Source Control)
 
-Follow these steps:
+📱 Android Application Integration
+This project includes a specialized Android WebView implementation, allowing the web platform to function as a native mobile application.
+Hybrid Architecture: Runs the web application within a native container.
+Native Features: Supports persistent cookies, authentication states, and real-time updates.
+Zero-Config Backend: No additional API changes required; the app consumes the same React frontend.
+Security: Implements WebChromeClient to handle secure Google Login popups natively.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+🔮 Future Scope
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+🧠 AI-Driven Analysis: Predictive modeling for drying time optimization.
+⚙️ Automated Control: Integration with actuators (fans, vents, heaters) for closed-loop control.
+📊 Advanced Analytics: Historical data reporting and trend analysis.
+🔌 Hardware Integration: Full deployment with physical IoT sensors and microcontrollers.
 
-# Step 3: Install the necessary dependencies.
-npm i
+⚙️ Local Development Setup
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+To set up the project locally, follow these steps:
+
+Clone the repository:
+git clone [https://github.com/your-username/solardry-iot.git](https://github.com/your-username/solardry-iot.git)
+cd solardry-iot
+
+
+Install Dependencies:
+npm install
+
+
+Configure Environment:
+Create a .env file in the root directory.
+Add your Firebase configuration keys (API Key, Auth Domain, Project ID, etc.).
+Run Development Server:
 npm run dev
-```
 
-**Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Note: The .env file is excluded from the repository for security. You must provide your own Firebase credentials.
 
-**Use GitHub Codespaces**
+📂 Project Structure
+src/
+├── components/   # Reusable UI components (Charts, Cards, Nav)
+├── pages/        # Application routes (Intro, Login, Dashboard)
+├── context/      # Global state management (Auth Context)
+├── firebase/     # Firebase initialization and configuration
+├── styles/       # Tailwind and global CSS
+└── utils/        # Helper functions and constants
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-## What technologies are used for this project?
+👩‍💻 Project Ownership
 
-This project is built with:
+This project is developed and maintained as part of an academic submission. All design decisions, logic implementations, and architectural choices were made with a focus on academic integrity, clarity, and future scalability.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+📜 License
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+This project is intended for educational purposes only.

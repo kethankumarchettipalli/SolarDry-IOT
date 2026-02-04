@@ -39,7 +39,7 @@ export const DashboardLayout: React.FC = () => {
 
   const handleLogout = async () => {
     await logout();
-    navigate("/login");
+    navigate("/", { replace: true });
   };
 
   const isActive = (path: string) => location.pathname === path;
