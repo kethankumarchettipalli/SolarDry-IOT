@@ -24,6 +24,8 @@ build
 .env.*
 *.local
 .vercel
+serviceAccountKey.json
+setAdmin.js
 
 # =========================
 # Editor directories & files
@@ -42,3 +44,5 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+serviceAccountKey.json
+setAdmin.js
