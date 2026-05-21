@@ -48,6 +48,7 @@ export interface User {
   email: string;
   displayName?: string;
   photoURL?: string;
+  isAdmin?: boolean;
 }
 
 export type SensorStatus = "normal" | "warning" | "critical";

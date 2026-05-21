@@ -37,11 +37,12 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-const mapFirebaseUser = (firebaseUser: FirebaseUser, displayName?: string): User => ({
+const mapFirebaseUser = (firebaseUser: FirebaseUser, displayName?: string, isAdmin: boolean = false): User => ({
   uid: firebaseUser.uid,
   email: firebaseUser.email || "",
   displayName: displayName || firebaseUser.displayName || firebaseUser.email?.split("@")[0],
   photoURL: firebaseUser.photoURL || undefined,
+  isAdmin,
 });
 
 // Helper: Create Profile in Realtime Database
@@ -81,7 +82,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             console.warn("Could not fetch user name:", error);
           }
         }
-        setUser(mapFirebaseUser(firebaseUser, displayName || undefined));
+        const idTokenResult = await firebaseUser.getIdTokenResult();
+        const isAdmin = !!idTokenResult.claims.admin;
+        setUser(mapFirebaseUser(firebaseUser, displayName || undefined, isAdmin));
       } else {
         setUser(null);
       }

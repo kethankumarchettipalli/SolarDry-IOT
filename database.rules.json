@@ -1,0 +1,17 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    "system_config": {
+      ".write": "auth != null && auth.token.admin === true"
+    },
+    "liveData": {
+      ".write": "auth != null && auth.token.admin === true"
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "$uid === auth.uid || (auth != null && auth.token.admin === true)"
+      }
+    }
+  }
+}

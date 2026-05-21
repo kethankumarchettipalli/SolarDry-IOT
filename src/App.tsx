@@ -13,6 +13,8 @@ import Alerts from "@/pages/Alerts";
 import SessionHistory from "@/pages/SessionHistory";
 import SettingsPage from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
+import AdminPanel from "@/pages/AdminPanel";
+import { AdminRoute } from "@/components/layout/AdminRoute";
 
 // Create React Query client
 const queryClient = new QueryClient();
@@ -58,6 +60,7 @@ const AppRoutes = () => {
         <Route path="/alerts" element={<Alerts />} />
         <Route path="/history" element={<SessionHistory />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />
       </Route>
 
       {/* Legacy redirect */}
