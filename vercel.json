@@ -7,7 +7,7 @@
   "crons": [
     {
       "path": "/api/simulate",
-      "schedule": "* * * * *"
+      "schedule": "0 0,12 * * *"
     }
   ]
 }
