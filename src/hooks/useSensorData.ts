@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, query, limitToLast, orderByChild } from "firebase/database";
 import { database } from "@/lib/firebase";
 import { SensorData, SensorStatus, CropConfig } from "@/lib/shared";
 
@@ -43,37 +43,46 @@ export const useSensorData = (selectedCrop: CropConfig | null): UseSensorDataRet
   useEffect(() => {
     // Firebase Realtime Database listener for live sensor data
     const liveDataRef = ref(database, "liveData");
-
-    const unsubscribe = onValue(
-      liveDataRef,
-      (snapshot) => {
-        setIsConnected(true);
-        const data = snapshot.val();
-
-        if (data) {
-          const sensorReading: SensorData = {
-            temperature: data.temperature ?? 0,
-            humidity: data.humidity ?? 0,
-            timestamp: data.timestamp ? new Date(data.timestamp) : new Date(),
-          };
-
-          setCurrentData(sensorReading);
-          setLastUpdate(new Date());
-
-          // Add to historical data
-          setHistoricalData((prev) => {
-            const updated = [...prev, sensorReading];
-            return updated.slice(-60); // Keep last 60 readings
-          });
-        }
-      },
-      (error) => {
-        console.error("Firebase connection error:", error);
-        setIsConnected(false);
+    const unsubscribeLive = onValue(liveDataRef, (snapshot) => {
+      setIsConnected(true);
+      const data = snapshot.val();
+      if (data) {
+        const sensorReading: SensorData = {
+          temperature: data.temperature ?? 0,
+          humidity: data.humidity ?? 0,
+          timestamp: data.timestamp ? new Date(data.timestamp) : new Date(),
+        };
+        setCurrentData(sensorReading);
+        setLastUpdate(new Date());
       }
-    );
+    }, (error) => {
+      console.error("Firebase connection error:", error);
+      setIsConnected(false);
+    });
 
-    return () => unsubscribe();
+    // Firebase listener for historical data
+    const historyRef = ref(database, "sensor_history");
+    const historyQuery = query(historyRef, orderByChild("timestamp"), limitToLast(60));
+    const unsubscribeHistory = onValue(historyQuery, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const records = Object.values(data) as any[];
+        const mappedRecords: SensorData[] = records.map(r => ({
+          temperature: r.temperature ?? 0,
+          humidity: r.humidity ?? 0,
+          timestamp: r.timestamp ? new Date(r.timestamp) : new Date(),
+        })).sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+        
+        setHistoricalData(mappedRecords);
+      } else {
+        setHistoricalData([]); // Cleared when session ends
+      }
+    });
+
+    return () => {
+      unsubscribeLive();
+      unsubscribeHistory();
+    };
   }, []);
 
   return {
@@ -85,3 +94,4 @@ export const useSensorData = (selectedCrop: CropConfig | null): UseSensorDataRet
     lastUpdate,
   };
 };
+
